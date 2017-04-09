@@ -27,16 +27,16 @@ public class TelematicsImpl implements Telematics {
         try (PrintWriter out = new PrintWriter(vehicleInfo.getVIN() + ".json")) {
             out.println(carFile);
             out.flush();
-//            System.out.println(carFile);
+           System.out.println(carFile);
         }
 
         File file = new File(".");
         for (File f : file.listFiles()) {
             if (f.getName().endsWith(".json")) {
-                divisor += 1;
+                ++divisor;
                 try (BufferedReader in = new BufferedReader(new FileReader(f.getName()))) {
                     carFile = in.readLine();
-                    for (int i = 0; i < divisor; ++i) {
+                    for (int i = 0; i < vehicleInfos.length; ++i) {
                         if (vehicleInfos[i] != null) {
                             VINjson = vehicleInfos[i].getVIN() + ".json";
                             if (VINjson.equals(f.getName())) {
@@ -62,11 +62,11 @@ public class TelematicsImpl implements Telematics {
             }
         }
 
-//        System.out.println("total odometer is " + totOdometer);
-//        System.out.println("total consumption is " + totConsumption);
-//        System.out.println("total last oil change is " + totLastOilChange);
-//        System.out.println("total engine size is " + totEngineSize);
-//        System.out.println("total number of vehicles " + divisor);
+        System.out.println("total odometer is " + totOdometer);
+        System.out.println("total consumption is " + totConsumption);
+        System.out.println("total last oil change is " + totLastOilChange);
+        System.out.println("total engine size is " + totEngineSize);
+        System.out.println("total number of vehicles " + divisor);
 
         HTML_TOP_WRITE = Telematics.HTML_TOP.replace("%count%",String.valueOf(divisor));
         HTML_TOP_WRITE = HTML_TOP_WRITE.replace("%odometer%",String.format("%.1f",totOdometer/divisor));
@@ -80,7 +80,7 @@ public class TelematicsImpl implements Telematics {
             TABLE_ROW_WRITE[i] = TABLE_ROW_WRITE[i].replace("%odometer%",String.valueOf(vehicleInfos[i].getOdometer()));
             TABLE_ROW_WRITE[i] = TABLE_ROW_WRITE[i].replace("%consumption%",String.valueOf(vehicleInfos[i].getConsumption()));
             TABLE_ROW_WRITE[i] = TABLE_ROW_WRITE[i].replace("%lastoilchange%",String.valueOf(vehicleInfos[i].getOdometerReadingLastOilChange()));
-            TABLE_ROW_WRITE[i] = TABLE_ROW_WRITE[i].replace("%enginesize%",vehicleInfos[i].getEngineSize());
+            TABLE_ROW_WRITE[i] = TABLE_ROW_WRITE[i].replace("%enginesize%",String.format("%.1f",Double.valueOf(vehicleInfos[i].getEngineSize())));
             TABLE_ROW_WRITE[i] = TABLE_ROW_WRITE[i].replace("%mpg%",String.format("%.1f",vehicleInfos[i].milesPerGallon()));
         }
 
